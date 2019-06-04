@@ -3,59 +3,50 @@
 # An bash script implementation of nmap 
 # created by Dan Hope on 5-28-19
 
+# Colors
+NORMAL=$("\033[m")
+MENU=$("\033[36m") # Blue
+TEXT=$("\033[33m") # Yellow
+NUMBER=$("\033[33m") # Yellow
+MSGCOLOR=$("\033[01;31m") # Bold red
+BGRED=$("\033[41m") # Red background
+FGRED=$("\033[31m") # Red foreground
+
 # Target request menu
 target_request(){
-	normal=`echo "\033[m"`
-	menu=`echo "\033[36m"` # Blue
-	text=`echo "\033[33m"` # Yellow
-	bgred=`echo "\033[41m"` # Red background
-	fgred=`echo "\033[31m"` # Red foreground
-	printf "\n${fgred}Welcome to danMap -- nmap for noobs\n"
-	printf "${menu}***********************************************${normal}\n"
-	printf "${menu}**${text} Please enter the IP address or${normal}\n"
-	printf "${menu}**${text} domain you want to scan: ${fgred}"
-	read target
-
+	printf "\n${FGRED}Welcome to danMap -- nmap for noobs\n"
+	printf "${MENU}***********************************************${NORMAL}\n"
+	printf "${MENU}**${TEXT} Please enter the IP address or${NORMAL}\n"
+	printf "${MENU}**${TEXT} domain you want to scan: ${FGRED}"
+	read TARGET
 }
 
-# Create the initial menu
+# Create the initial MENU
 show_menu(){
-	normal=`echo "\033[m"`
-	menu=`echo "\033[36m"` # Blue
-	number=`echo "\033[33m"` # Yellow
-	bgred=`echo "\033[41m"` # Red background
-	fgred=`echo "\033[31m"` # Red foreground
-	printf "${menu}***********************************************${normal}\n"
-	printf "${menu}**${number} 1) ${menu} Quick Scan${normal}\n"
-	printf "${menu}**${number} 2) ${menu} Intense Scan${normal}\n"
-	printf "${menu}**${number} 3) ${menu} Intense, all TCP ports${normal}\n"
-	printf "${menu}**${number} 4) ${menu} Ping Scan${normal}\n"
-	printf "${menu}**${number} 5) ${menu} Regular Scan${normal}\n"
-	printf "${menu}***********************************************${normal}\n"
-	printf "Please enter a menu option and press [ENTER] or ${fgred}x to exit. ${normal}"
-	read opt
+	printf "${MENU}***********************************************${NORMAL}\n"
+	printf "${MENU}**${NUMBER} 1) ${MENU} Quick Scan${NORMAL}\n"
+	printf "${MENU}**${NUMBER} 2) ${MENU} Intense Scan${NORMAL}\n"
+	printf "${MENU}**${NUMBER} 3) ${MENU} Intense, all TCP ports${NORMAL}\n"
+	printf "${MENU}**${NUMBER} 4) ${MENU} Ping Scan${NORMAL}\n"
+	printf "${MENU}**${NUMBER} 5) ${MENU} Regular Scan${NORMAL}\n"
+	printf "${MENU}***********************************************${NORMAL}\n"
+	printf "Please enter a menu option and press [ENTER] or ${FGRED}x to exit. ${NORMAL}"
+	read OPT
 }
 
 # Create choice feedback
 option_picked(){
-	msgcolor=`echo "\033[01;31m"` # Bold red
-	normal=`echo "\033[00;00m"` # Normal white
-	message=${@:-"${normal}Error: Not a valid entry"}
-	printf "${msgcolor}${message}${normal}\n"
+	MESSAGE=${@:-"${NORMAL}Error: Not a valid entry"}
+	printf "${MSGCOLOR}${MESSAGE}${NORMAL}\n"
 }
 
 # Another scan?
 another_scan(){
-	normal=`echo "\033[m"`
-	menu=`echo "\033[36m"` # Blue
-	text=`echo "\033[33m"` # Yellow
-	bgred=`echo "\033[31m"` # Red Foreground
-	printf "\n${menu}***********************************************${normal}\n"
-	printf "${menu}**${text}Would you like to run another scan? (y/n): ${normal}"
-	read continue
+	printf "\n${MENU}***********************************************${NORMAL}\n"
+	printf "${MENU}**${TEXT}Would you like to run another scan? (y/n): ${NORMAL}"
+	read CONTINUE
 	
-
-	if [ $continue = 'y' ]
+	if [ $CONTINUE = 'y' ]
 	then
 		target_request;
 	else
@@ -67,48 +58,48 @@ another_scan(){
 clear
 target_request
 show_menu
-while [ $opt != '' ]
+while [ $OPT != '' ]
 	do
-	if [ $opt = '' ];
+	if [ $OPT = '' ];
 	then
 		exit;
 	else
-		case $opt in
+		case $OPT in
 			1) clear;
-				option_picked "Quick Scan chosen on ${target}";
-				printf "nmap -T4 -F ${target}\n";
-				nmap -T4 -F ${target};
+				option_picked "Quick Scan chosen on ${TARGET}";
+				printf "nmap -T4 -F ${TARGET}\n";
+				nmap -T4 -F ${TARGET};
 				another_scan;
 			;;
 			2) clear;
-				option_picked "Intense Scan on ${target}";
-				printf "nmap -T4 -A -v ${target}\n";
-				nmap -T4 -A -v ${target};
+				option_picked "Intense Scan on ${TARGET}";
+				printf "nmap -T4 -A -v ${TARGET}\n";
+				nmap -T4 -A -v ${TARGET};
 				show_menu;
 			;;
 			3) clear;
-				option_picked "Intense Scan, all TCP ports on ${target}";
-				printf "nmap -p 1-65535 -T4 -A -v ${target}\n";
-				nmap -p 1-65535 -T4 -A -v ${target};
+				option_picked "Intense Scan, all TCP ports on ${TARGET}";
+				printf "nmap -p 1-65535 -T4 -A -v ${TARGET}\n";
+				nmap -p 1-65535 -T4 -A -v ${TARGET};
 				show_menu;
 			;;
 			4) clear;
-				option_picked "Ping Scan on ${target}";
-				printf "nmap -sn ${target}\n";
-				nmap -sn ${target};
+				option_picked "Ping Scan on ${TARGET}";
+				printf "nmap -sn ${TARGET}\n";
+				nmap -sn ${TARGET};
 				show_menu;
 			;;
 			5) clear;
-				option_picked "Regular Scan on ${target}";
-				printf "nmap ${target}\n";
-				nmap ${target};
+				option_picked "Regular Scan on ${TARGET}";
+				printf "nmap ${TARGET}\n";
+				nmap ${TARGET};
 				show_menu;
 			;;
 			x) printf "Thanks for using danMap!\n\n";
 				exit;
 			;;
 			*) clear;
-				option_picked "Pick an option from the menu";
+				option_picked "Pick an option from the MENU";
 				show_menu;
 			;;
 		esac
